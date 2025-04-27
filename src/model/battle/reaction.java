@@ -1,4 +1,3 @@
-// Reaction.java
 package model.battle;
 
 import model.character.Character;
