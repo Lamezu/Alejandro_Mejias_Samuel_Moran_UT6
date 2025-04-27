@@ -1,6 +1,6 @@
 package model.characters;
 
-public abstract class meleeCharacter extends character {
+public abstract class PhysicalCharacter extends Character {
     protected int strength;
     protected int resistance;
     

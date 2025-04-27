@@ -122,9 +122,9 @@ public class Battle {
             System.out.println("4. Heal");
         }
         
-        if (currentTurn instanceof model.character.Warrior) {
+        if (currentTurn instanceof model.Character.Warrior) {
             System.out.println("5. Charge Attack");
-        } else if (currentTurn instanceof model.character.Mage) {
+        } else if (currentTurn instanceof model.Character.Mage) {
             System.out.println("5. Regenerate Mana");
         }
         
@@ -172,13 +172,13 @@ public class Battle {
                 break;
                 
             case 5:
-                if (currentTurn instanceof model.character.Warrior) {
-                    damage = ((model.character.Warrior) currentTurn).chargeAttack();
+                if (currentTurn instanceof model.Character.Warrior) {
+                    damage = ((model.Character.Warrior) currentTurn).chargeAttack();
                     if (damage > 0) {
                         applyDamage(damage, target);
                     }
-                } else if (currentTurn instanceof model.character.Mage) {
-                    ((model.character.Mage) currentTurn).regenerateMana();
+                } else if (currentTurn instanceof model.Character.Mage) {
+                    ((model.Character.Mage) currentTurn).regenerateMana();
                 } else {
                     System.out.println("Invalid option!");
                 }

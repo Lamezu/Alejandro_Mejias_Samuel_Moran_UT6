@@ -47,9 +47,9 @@ public class Potion {
                 break;
 
             case "fuerza":
-                if (target instanceof model.character.PhysicalCharacter) {
-                    ((model.character.PhysicalCharacter) target).setStrength(
-                        ((model.character.PhysicalCharacter) target).getStrength() + amount);
+                if (target instanceof model.Character.PhysicalCharacter) {
+                    ((model.Character.PhysicalCharacter) target).setStrength(
+                        ((model.Character.PhysicalCharacter) target).getStrength() + amount);
                     System.out.println(target.getName() + " increases strength by " + amount + " points");
                 } else {
                     System.out.println("This type of potion does not affect " + target.getName());
@@ -58,9 +58,9 @@ public class Potion {
                 break;
 
             case "inteligencia":
-                if (target instanceof model.character.MagicCharacter) {
-                    ((model.character.MagicCharacter) target).setIntelligence(
-                        ((model.character.MagicCharacter) target).getIntelligence() + amount);
+                if (target instanceof model.Character.MagicCharacter) {
+                    ((model.Character.MagicCharacter) target).setIntelligence(
+                        ((model.Character.MagicCharacter) target).getIntelligence() + amount);
                     System.out.println(target.getName() + " increases intelligence by " + amount + " points");
                 } else {
                     System.out.println("This type of potion does not affect " + target.getName());

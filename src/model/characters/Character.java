@@ -1,6 +1,6 @@
 package model.characters;
 
-public abstract class character {
+public abstract class Character {
     protected String name;
     protected int maxHealth;
     protected int currentHealth;
@@ -10,7 +10,7 @@ public abstract class character {
     protected String activeElement; // Elemento con el que está imbuido actualmente
     protected int activeElementTurns; // Turnos restantes con el elemento activo
 
-    public character(String name, int maxHealth, int maxMana, String element) {
+    public Character(String name, int maxHealth, int maxMana, String element) {
         this.name = name;
         this.maxHealth = maxHealth;
         this.currentHealth = maxHealth;
