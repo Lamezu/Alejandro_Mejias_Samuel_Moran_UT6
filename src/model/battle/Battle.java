@@ -1,6 +1,11 @@
 package model.battle;
 
-import model.character.Character;
+import model.characters.Character;
+import model.interfaces.Defendable;
+import model.interfaces.Healable;
+import model.interfaces.Magical;
+import model.characters.Warrior;
+import model.characters.Mage;
 import java.util.Scanner;
 
 public class Battle {
@@ -8,12 +13,16 @@ public class Battle {
     private Character player2;
     private Character currentTurn;
     private int turnNumber;
+    private int player1PenaltyTurns;
+    private int player2PenaltyTurns;
     
     public Battle(Character player1, Character player2) {
         this.player1 = player1;
         this.player2 = player2;
         this.currentTurn = player1; // Player 1 starts
         this.turnNumber = 1;
+        this.player1PenaltyTurns = 0;
+        this.player2PenaltyTurns = 0;
     }
     
     /**
@@ -23,7 +32,7 @@ public class Battle {
         Scanner scanner = new Scanner(System.in);
         boolean battleOngoing = true;
         
-        System.out.println("=== THE BATTLE BEGINS ===");
+        System.out.println("=== LA BATALLA COMIENZA ===");
         System.out.println(player1.getName() + " VS " + player2.getName());
         
         // Bucle principal de la batalla
@@ -31,11 +40,20 @@ public class Battle {
             showBattleStatus();
             
             Character opponent = (currentTurn == player1) ? player2 : player1;
+            int currentPenalty = (currentTurn == player1) ? player1PenaltyTurns : player2PenaltyTurns;
             
-            showActionMenu();
-            
-            int option = scanner.nextInt();
-            performAction(option, opponent);
+            if (currentPenalty > 0) {
+                System.out.println(currentTurn.getName() + " está bajo penalización y no puede actuar este turno.");
+                if (currentTurn == player1) {
+                    player1PenaltyTurns--;
+                } else {
+                    player2PenaltyTurns--;
+                }
+            } else {
+                showActionMenu();
+                int option = scanner.nextInt();
+                performAction(option, opponent);
+            }
             
             if (!player1.isAlive() || !player2.isAlive()) {
                 battleOngoing = false;
@@ -50,7 +68,7 @@ public class Battle {
      * Muestra el estado actual de la batalla
      */
     private void showBattleStatus() {
-        System.out.println("\n=== TURN " + turnNumber + " - " + currentTurn.getName() + " ===");
+        System.out.println("\n=== TURNO " + turnNumber + " - " + currentTurn.getName() + " ===");
         
         System.out.println(player1.getName() + " (HP: " + player1.getCurrentHealth() + "/" + player1.getMaxHealth() +
                          ", Mana: " + player1.getCurrentMana() + "/" + player1.getMaxMana() + ")");
@@ -58,7 +76,7 @@ public class Battle {
         showProgressBar("Mana", player1.getCurrentMana(), player1.getMaxMana(), 20);
         
         if (player1.getActiveElement() != null) {
-            System.out.println("Active Element: " + player1.getActiveElement());
+            System.out.println("Elemento activo: " + player1.getActiveElement().getName());
         }
         
         System.out.println();
@@ -69,7 +87,7 @@ public class Battle {
         showProgressBar("Mana", player2.getCurrentMana(), player2.getMaxMana(), 20);
         
         if (player2.getActiveElement() != null) {
-            System.out.println("Active Element: " + player2.getActiveElement());
+            System.out.println("Elemento activo: " + player2.getActiveElement().getName());
         }
         
         System.out.println();
@@ -85,9 +103,9 @@ public class Battle {
         String endColor = "";
         
         if (label.equals("HP")) {
-            startColor = "\u001B[32m"; // Green for HP
+            startColor = "\u001B[32m"; // Verde para HP
         } else if (label.equals("Mana")) {
-            startColor = "\u001B[34m"; // Blue for Mana
+            startColor = "\u001B[34m"; // Azul para Mana
         }
         endColor = "\u001B[0m";
         
@@ -110,25 +128,25 @@ public class Battle {
      * Muestra el menú de acciones disponibles
      */
     private void showActionMenu() {
-        System.out.println("\nAVAILABLE ACTIONS:");
-        System.out.println("1. Normal Attack");
-        System.out.println("2. Defend");
+        System.out.println("\nACCIONES DISPONIBLES:");
+        System.out.println("1. Ataque Normal");
+        System.out.println("2. Defender");
         
-        if (currentTurn instanceof model.interfaces.Magical) {
-            System.out.println("3. Cast Spell");
+        if (currentTurn instanceof Magical) {
+            System.out.println("3. Lanzar Hechizo");
         }
         
-        if (currentTurn instanceof model.interfaces.Healable) {
-            System.out.println("4. Heal");
+        if (currentTurn instanceof Healable) {
+            System.out.println("4. Curar");
         }
         
-        if (currentTurn instanceof model.Character.Warrior) {
-            System.out.println("5. Charge Attack");
-        } else if (currentTurn instanceof model.Character.Mage) {
-            System.out.println("5. Regenerate Mana");
+        if (currentTurn instanceof Warrior) {
+            System.out.println("5. Ataque Cargado");
+        } else if (currentTurn instanceof Mage) {
+            System.out.println("5. Regenerar Maná");
         }
         
-        System.out.print("Choose an option: ");
+        System.out.print("Elige una opción: ");
     }
     
     /**
@@ -144,48 +162,48 @@ public class Battle {
                 break;
                 
             case 2:
-                if (currentTurn instanceof model.interfaces.Defendable) {
-                    int defense = ((model.interfaces.Defendable) currentTurn).defend();
-                    System.out.println(currentTurn.getName() + " defends, increasing resistance by " + defense + "!");
+                if (currentTurn instanceof Defendable) {
+                    int defense = ((Defendable) currentTurn).defend();
+                    System.out.println(currentTurn.getName() + " se defiende, aumentando su resistencia en " + defense + "!");
                 } else {
-                    System.out.println(currentTurn.getName() + " tries to defend but doesn't know how!");
+                    System.out.println(currentTurn.getName() + " intenta defenderse pero no sabe cómo!");
                 }
                 break;
                 
             case 3:
-                if (currentTurn instanceof model.interfaces.Magical) {
-                    damage = ((model.interfaces.Magical) currentTurn).castSpell(target);
+                if (currentTurn instanceof Magical) {
+                    damage = ((Magical) currentTurn).castSpell(target);
                     if (damage > 0) {
                         applyDamage(damage, target);
                     }
                 } else {
-                    System.out.println("Invalid option!");
+                    System.out.println("¡Opción inválida!");
                 }
                 break;
                 
             case 4:
-                if (currentTurn instanceof model.interfaces.Healable) {
-                    ((model.interfaces.Healable) currentTurn).heal(currentTurn);
+                if (currentTurn instanceof Healable) {
+                    ((Healable) currentTurn).heal(currentTurn);
                 } else {
-                    System.out.println("Invalid option!");
+                    System.out.println("¡Opción inválida!");
                 }
                 break;
                 
             case 5:
-                if (currentTurn instanceof model.Character.Warrior) {
-                    damage = ((model.Character.Warrior) currentTurn).chargeAttack();
+                if (currentTurn instanceof Warrior) {
+                    damage = ((Warrior) currentTurn).chargeAttack();
                     if (damage > 0) {
                         applyDamage(damage, target);
                     }
-                } else if (currentTurn instanceof model.Character.Mage) {
-                    ((model.Character.Mage) currentTurn).regenerateMana();
+                } else if (currentTurn instanceof Mage) {
+                    ((Mage) currentTurn).regenerateMana();
                 } else {
-                    System.out.println("Invalid option!");
+                    System.out.println("¡Opción inválida!");
                 }
                 break;
                 
             default:
-                System.out.println("Invalid option! You lose your turn.");
+                System.out.println("¡Opción inválida! Pierdes tu turno.");
                 break;
         }
     }
@@ -194,24 +212,12 @@ public class Battle {
      * Aplica daño a un objetivo considerando elementos y reacciones
      */
     private void applyDamage(int baseDamage, Character target) {
-        double reactionMultiplier = 1.0;
-        String reactionMessage = "";
+        int finalDamage = Reaction.calculateDamageWithReaction(currentTurn, target, baseDamage);
         
-        if (currentTurn.getElement() != null && target.getActiveElement() != null) {
-            reactionMultiplier = ElementSystem.calculateReactionMultiplier(
-                currentTurn.getElement(), target.getActiveElement());
-            
-            reactionMessage = ElementSystem.getReactionName(
-                currentTurn.getElement(), target.getActiveElement());
-        }
+        System.out.println(currentTurn.getName() + " causa " + baseDamage + " de daño a " + target.getName());
         
-        int finalDamage = (int)(baseDamage * reactionMultiplier);
-        
-        System.out.println(currentTurn.getName() + " deals " + baseDamage + " damage to " + target.getName());
-        
-        if (reactionMultiplier != 1.0) {
-            System.out.println("!" + reactionMessage + "! Damage multiplier: x" + reactionMultiplier);
-            System.out.println("Final damage: " + finalDamage);
+        if (finalDamage != baseDamage) {
+            System.out.println("Daño final: " + finalDamage);
         }
         
         target.receiveDamage(finalDamage);
@@ -234,22 +240,50 @@ public class Battle {
     }
     
     /**
+     * Actualiza los turnos de penalización para un jugador
+     */
+    public void applyPenaltyToPlayer(Character player, int turns) {
+        if (player == player1) {
+            player1PenaltyTurns = turns;
+        } else if (player == player2) {
+            player2PenaltyTurns = turns;
+        }
+    }
+    
+    /**
      * Muestra el resultado final de la batalla
      */
     private void showBattleResult() {
-        System.out.println("\n=== END OF BATTLE ===");
+        System.out.println("\n=== FIN DE LA BATALLA ===");
         
         if (!player1.isAlive() && !player2.isAlive()) {
-            System.out.println("DRAW! Both players have fallen.");
+            System.out.println("¡EMPATE! Ambos jugadores han caído.");
         } else if (!player1.isAlive()) {
-            System.out.println(player2.getName() + " WINS THE BATTLE!");
+            System.out.println(player2.getName() + " ¡GANA LA BATALLA!");
         } else {
-            System.out.println(player1.getName() + " WINS THE BATTLE!");
+            System.out.println(player1.getName() + " ¡GANA LA BATALLA!");
         }
         
-        System.out.println("\nFINAL STATS:");
+        System.out.println("\nESTADÍSTICAS FINALES:");
         System.out.println(player1.getName() + ": " + player1.getCurrentHealth() + "/" + player1.getMaxHealth() + " HP");
         System.out.println(player2.getName() + ": " + player2.getCurrentHealth() + "/" + player2.getMaxHealth() + " HP");
-        System.out.println("Duration: " + (turnNumber - 1) + " turns");
+        System.out.println("Duración: " + (turnNumber - 1) + " turnos");
+    }
+    
+    // Getters
+    public Character getPlayer1() {
+        return player1;
+    }
+    
+    public Character getPlayer2() {
+        return player2;
+    }
+    
+    public Character getCurrentTurn() {
+        return currentTurn;
+    }
+    
+    public int getTurnNumber() {
+        return turnNumber;
     }
 }

@@ -1,17 +1,40 @@
 package model.battle;
 
-import model.character.Character;
+import model.characters.Character;
 
 public class Reaction {
+    /**
+     * Calcula el daño considerando las reacciones elementales.
+     * @param attacker Personaje atacante
+     * @param defender Personaje defensor
+     * @param baseDamage Daño base del ataque
+     * @return Daño final después de aplicar reacciones
+     */
     public static int calculateDamageWithReaction(Character attacker, Character defender, int baseDamage) {
-        Element e1 = attacker.getCurrentElement();
-        Element e2 = defender.getCurrentElement();
-
-        if (e1 == Element.WATER && e2 == Element.FIRE) return (int)(baseDamage * 1.5); // Vaporizado
-        if (e1 == Element.FIRE && e2 == Element.PLANT) return (int)(baseDamage * 1.5); // Quemado
-        if (e1 == Element.LIGHTNING && e2 == Element.WATER) return (int)(baseDamage * 2); // Electrocución
-        // ... más reacciones
-
-        return baseDamage;
+        Element attackerElement = attacker.getElement();
+        Element defenderElement = defender.getActiveElement();
+        
+        if (attackerElement == null || defenderElement == null) {
+            return baseDamage;
+        }
+        
+        double multiplier = Element.calculateReactionMultiplier(attackerElement, defenderElement);
+        String reactionName = Element.getReactionName(attackerElement, defenderElement);
+        
+        if (multiplier != 1.0) {
+            System.out.println("¡" + reactionName + "! Multiplicador de daño: x" + multiplier);
+        }
+        
+        return (int)(baseDamage * multiplier);
+    }
+    
+    /**
+     * Verifica si hay una reacción elemental entre dos elementos
+     * @param attackerElement Elemento del atacante
+     * @param defenderElement Elemento del defensor
+     * @return true si hay reacción, false si no
+     */
+    public static boolean hasReaction(Element attackerElement, Element defenderElement) {
+        return Element.calculateReactionMultiplier(attackerElement, defenderElement) != 1.0;
     }
 }
