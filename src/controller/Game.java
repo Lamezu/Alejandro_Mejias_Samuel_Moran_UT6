@@ -1,8 +1,6 @@
 package controller;
 
-import model.characters.*;
-import model.battle.Battle;
-import model.battle.Element;
+import model.*;
 import view.BattleInterface;
 
 import java.util.ArrayList;

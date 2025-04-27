@@ -1,5 +1,7 @@
-import model.character.*;
+import model.characters.*;
 import model.interfaces.*;
+
+import controller.*;
 
 public class Main {
     public static void main(String[] args) {
