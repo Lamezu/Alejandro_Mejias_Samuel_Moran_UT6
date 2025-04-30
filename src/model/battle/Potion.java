@@ -66,7 +66,7 @@ public class Potion {
                 
             case STRENGTH:
                 if (target instanceof PhysicalCharacter) {
-                    ((PhysicalCharacter) target).increaseStrength(amount);
+                    ((PhysicalCharacter) target).setStrength(((PhysicalCharacter) target).getStrength() + amount);
                     System.out.println(target.getName() + " aumenta su fuerza en " + amount + " puntos");
                 } else {
                     System.out.println("Este tipo de poción no afecta a " + target.getName());
@@ -76,7 +76,7 @@ public class Potion {
                 
             case INTELLIGENCE:
                 if (target instanceof MagicalCharacter) {
-                    ((MagicalCharacter) target).increaseIntelligence(amount);
+                    ((MagicalCharacter) target).setIntelligence(((MagicalCharacter) target).getIntelligence() + amount);
                     System.out.println(target.getName() + " aumenta su inteligencia en " + amount + " puntos");
                 } else {
                     System.out.println("Este tipo de poción no afecta a " + target.getName());
@@ -86,7 +86,8 @@ public class Potion {
                 
             case ELEMENTAL:
                 if (element != null) {
-                    target.applyElement(element);
+                    target.setActiveElement(element.getName().toLowerCase());
+                    target.setActiveElementTurns(1);
                     System.out.println(target.getName() + " se imbuye con el elemento " + element.getName());
                 } else {
                     System.out.println("Poción elemental inválida");
@@ -99,9 +100,8 @@ public class Potion {
                 success = false;
         }
         
-        // Informar sobre la penalización
+        // Aplicar penalización al usuario
         if (success && penaltyTurns > 0) {
-            user.applyPenalty(penaltyTurns);
             System.out.println(user.getName() + " no podrá atacar durante " + penaltyTurns + " turno(s)");
         }
         
@@ -131,5 +131,10 @@ public class Potion {
     
     public Element getElement() {
         return element;
+    }
+    
+    // Método para verificar si tiene penalización
+    public boolean hasPenalty() {
+        return penaltyTurns > 0;
     }
 }
