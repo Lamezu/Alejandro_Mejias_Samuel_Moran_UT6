@@ -1,11 +1,11 @@
 package model.interfaces;
 
-import model.characters.Character;
+import model.characters.Characters;
 
 public interface Healable {
     /**
     Cura al objetivo especificado
     @param target Personaje objetivo para curar
     */
-    void heal(Character target);
+    void heal(Characters target);
 }

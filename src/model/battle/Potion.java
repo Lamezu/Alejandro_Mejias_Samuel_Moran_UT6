@@ -1,6 +1,6 @@
 package model.battle;
 
-import model.characters.Character;
+import model.characters.Characters;
 import model.characters.PhysicalCharacter;
 import model.characters.MagicalCharacter;
 
@@ -39,7 +39,7 @@ public class Potion {
      * @param target El personaje objetivo (puede ser el mismo)
      * @return true si se pudo usar la poción, false en caso contrario
      */
-    public boolean use(Character user, Character target) {
+    public boolean use(Characters user, Characters target) {
         // Verificar si el usuario tiene suficiente maná
         if (user.getCurrentMana() < manaCost) {
             System.out.println(user.getName() + " no tiene suficiente maná para usar " + name);

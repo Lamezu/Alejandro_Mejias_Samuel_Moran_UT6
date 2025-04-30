@@ -55,7 +55,7 @@ public class Assassin extends PhysicalCharacter implements Movable, Healable {
         System.out.println(getName() + " moves silently with " + stealth + " stealth!");
     }
     @Override
-    public void heal(Character target) {
+    public void heal(Characters target) {
         if (getCurrentMana() < 20) {
             System.out.println(getName() + " doesn't have enough energy to use medicine!");
             return;

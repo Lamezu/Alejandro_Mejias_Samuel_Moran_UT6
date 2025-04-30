@@ -1,6 +1,6 @@
 package model.characters;
 
-public abstract class MagicalCharacter extends Character {
+public abstract class MagicalCharacter extends Characters {
     protected int intelligence;
     protected int wisdom;
     public MagicalCharacter(String name, int level) {

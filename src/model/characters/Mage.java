@@ -17,7 +17,7 @@ public class Mage extends MagicalCharacter implements Magical, Healable {
         return damage;
     }
     @Override
-    public int castSpell(Character target) {
+    public int castSpell(Characters target) {
         if (getCurrentMana() < 20) {
             System.out.println(getName() + " doesn't have enough mana to cast a spell!");
             return 0;
@@ -28,7 +28,7 @@ public class Mage extends MagicalCharacter implements Magical, Healable {
         return damage;
     }
     @Override
-    public void heal(Character target) {
+    public void heal(Characters target) {
         if (getCurrentMana() < 25) {
             System.out.println(getName() + " doesn't have enough mana to cast healing magic!");
             return;

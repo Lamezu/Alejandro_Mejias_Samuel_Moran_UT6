@@ -1,6 +1,6 @@
 package model.battle;
 
-import model.characters.Character;
+import model.characters.Characters;
 import model.interfaces.Defendable;
 import model.interfaces.Healable;
 import model.interfaces.Magical;
@@ -9,14 +9,14 @@ import model.characters.Mage;
 import java.util.Scanner;
 
 public class Battle {
-    private Character player1;
-    private Character player2;
-    private Character currentTurn;
+    private Characters player1;
+    private Characters player2;
+    private Characters currentTurn;
     private int turnNumber;
     private int player1PenaltyTurns;
     private int player2PenaltyTurns;
     
-    public Battle(Character player1, Character player2) {
+    public Battle(Characters player1, Characters player2) {
         this.player1 = player1;
         this.player2 = player2;
         this.currentTurn = player1; // Player 1 starts
@@ -39,7 +39,7 @@ public class Battle {
         while (battleOngoing) {
             showBattleStatus();
             
-            Character opponent = (currentTurn == player1) ? player2 : player1;
+            Characters opponent = (currentTurn == player1) ? player2 : player1;
             int currentPenalty = (currentTurn == player1) ? player1PenaltyTurns : player2PenaltyTurns;
             
             if (currentPenalty > 0) {
@@ -152,7 +152,7 @@ public class Battle {
     /**
      * Realiza la acción seleccionada por el jugador
      */
-    private void performAction(int option, Character target) {
+    private void performAction(int option, Characters target) {
         int damage = 0;
         
         switch (option) {
@@ -211,7 +211,7 @@ public class Battle {
     /**
      * Aplica daño a un objetivo considerando elementos y reacciones
      */
-    private void applyDamage(int baseDamage, Character target) {
+    private void applyDamage(int baseDamage, Characters target) {
         int finalDamage = Reaction.calculateDamageWithReaction(currentTurn, target, baseDamage);
         target.receiveDamage(finalDamage);
         System.out.println(currentTurn.getName() + " inflige " + finalDamage + " daño a " + target.getName());
@@ -235,7 +235,7 @@ public class Battle {
     /**
      * Actualiza los turnos de penalización para un jugador
      */
-    public void applyPenaltyToPlayer(Character player, int turns) {
+    public void applyPenaltyToPlayer(Characters player, int turns) {
         if (player == player1) {
             player1PenaltyTurns = turns;
         } else if (player == player2) {
@@ -264,15 +264,15 @@ public class Battle {
     }
     
     // Getters
-    public Character getPlayer1() {
+    public Characters getPlayer1() {
         return player1;
     }
     
-    public Character getPlayer2() {
+    public Characters getPlayer2() {
         return player2;
     }
     
-    public Character getCurrentTurn() {
+    public Characters getCurrentTurn() {
         return currentTurn;
     }
     

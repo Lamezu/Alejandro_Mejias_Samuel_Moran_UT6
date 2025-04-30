@@ -1,6 +1,6 @@
 package model.interfaces;
 
-import model.characters.Character;
+import model.characters.Characters;
 
 public interface Magical {
     /**
@@ -8,5 +8,5 @@ public interface Magical {
     @param target Personaje objetivo del hechizo
     @return Cantidad de daño causado
     */
-    int castSpell(Character target);
+    int castSpell(Characters target);
 }
