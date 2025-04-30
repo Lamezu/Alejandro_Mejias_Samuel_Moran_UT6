@@ -92,4 +92,5 @@ public class DamageCalculator {
     public static int calculateManaRegenerationAmount(int wisdom) {
         return wisdom / 5 + random.nextInt(3);
     }
+    
 }

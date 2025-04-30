@@ -42,8 +42,16 @@ public abstract class PhysicalCharacter extends Characters {
     public void setResistance(int resistance) {
         this.resistance = resistance;
     }
+
+    public void increaseStrength(int amount) {
+        this.strength += amount;
+        System.out.println(getName() + " ahora tiene " + strength + " puntos de fuerza.");
+    }
+
     @Override
     public String toString() {
         return super.toString() + " - STR: " + strength + " - RES: " + resistance;
     }
+
+
 }

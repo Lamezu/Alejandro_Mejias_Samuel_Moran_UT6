@@ -1,12 +1,12 @@
 package model.battle;
 
+import java.util.Scanner;
 import model.characters.Characters;
+import model.characters.Mage;
+import model.characters.Warrior;
 import model.interfaces.Defendable;
 import model.interfaces.Healable;
 import model.interfaces.Magical;
-import model.characters.Warrior;
-import model.characters.Mage;
-import java.util.Scanner;
 
 public class Battle {
     private Characters player1;
@@ -19,23 +19,26 @@ public class Battle {
     public Battle(Characters player1, Characters player2) {
         this.player1 = player1;
         this.player2 = player2;
-        this.currentTurn = player1; // Player 1 starts
+        resetPlayersForBattle();
+        this.currentTurn = player1;
         this.turnNumber = 1;
         this.player1PenaltyTurns = 0;
         this.player2PenaltyTurns = 0;
     }
+
+    private void resetPlayersForBattle() {
+        player1.resetForBattle();
+        player2.resetForBattle();
+        System.out.println("¡Los personajes han sido restaurados para la batalla!");
+    }
     
-    /**
-     * Inicia la batalla por turnos
-     */
-    public void startBattle() {
-        Scanner scanner = new Scanner(System.in);
+    public void startBattle(Scanner mainScanner) {
         boolean battleOngoing = true;
         
-        System.out.println("=== LA BATALLA COMIENZA ===");
-        System.out.println(player1.getName() + " VS " + player2.getName());
+        System.out.println("\n=== LA BATALLA COMIENZA ===");
+        System.out.println("⚔️ " + player1.getName() + " (Elemento: " + player1.getElement() + ") VS " + 
+                         player2.getName() + " (Elemento: " + player2.getElement() + ") ⚔️");
         
-        // Bucle principal de la batalla
         while (battleOngoing) {
             showBattleStatus();
             
@@ -43,15 +46,12 @@ public class Battle {
             int currentPenalty = (currentTurn == player1) ? player1PenaltyTurns : player2PenaltyTurns;
             
             if (currentPenalty > 0) {
-                System.out.println(currentTurn.getName() + " está bajo penalización y no puede actuar este turno.");
-                if (currentTurn == player1) {
-                    player1PenaltyTurns--;
-                } else {
-                    player2PenaltyTurns--;
-                }
+                System.out.println("\n⏳ " + currentTurn.getName() + " está bajo penalización (" + currentPenalty + " turnos restantes)");
+                if (currentTurn == player1) player1PenaltyTurns--;
+                else player2PenaltyTurns--;
             } else {
                 showActionMenu();
-                int option = scanner.nextInt();
+                int option = mainScanner.nextInt();
                 performAction(option, opponent);
             }
             
@@ -64,219 +64,156 @@ public class Battle {
         }
     }
     
-    /**
-     * Muestra el estado actual de la batalla
-     */
     private void showBattleStatus() {
-        System.out.println("\n=== TURNO " + turnNumber + " - " + currentTurn.getName() + " ===");
-        
-        System.out.println(player1.getName() + " (HP: " + player1.getCurrentHealth() + "/" + player1.getMaxHealth() +
-                         ", Mana: " + player1.getCurrentMana() + "/" + player1.getMaxMana() + ")");
-        showProgressBar("HP", player1.getCurrentHealth(), player1.getMaxHealth(), 20);
-        showProgressBar("Mana", player1.getCurrentMana(), player1.getMaxMana(), 20);
-        
-        if (player1.getActiveElement() != null) {
-            System.out.println("Elemento activo: " + player1.getActiveElement());
+        System.out.println("\n=== TURNO " + turnNumber + " ===");
+        System.out.println("👉 Turno de: " + currentTurn.getName());
+        printCharacterStatus(player1);
+        printCharacterStatus(player2);
+    }
+
+    private void printCharacterStatus(Characters character) {
+        System.out.println("\n" + character.getName() + ":");
+        System.out.println("❤️ HP: " + character.getCurrentHealth() + "/" + character.getMaxHealth());
+        showProgressBar("HP", character.getCurrentHealth(), character.getMaxHealth(), 20);
+        System.out.println("🔵 Maná: " + character.getCurrentMana() + "/" + character.getMaxMana());
+        showProgressBar("Mana", character.getCurrentMana(), character.getMaxMana(), 20);
+        if (character.getActiveElement() != null) {
+            System.out.println("✨ Elemento activo: " + character.getActiveElement() + 
+                             " (" + character.getActiveElementTurns() + " turnos restantes)");
         }
-        
-        System.out.println();
-        
-        System.out.println(player2.getName() + " (HP: " + player2.getCurrentHealth() + "/" + player2.getMaxHealth() +
-                         ", Mana: " + player2.getCurrentMana() + "/" + player2.getMaxMana() + ")");
-        showProgressBar("HP", player2.getCurrentHealth(), player2.getMaxHealth(), 20);
-        showProgressBar("Mana", player2.getCurrentMana(), player2.getMaxMana(), 20);
-        
-        if (player2.getActiveElement() != null) {
-            System.out.println("Elemento activo: " + player2.getActiveElement());
-        }
-        
-        System.out.println();
     }
     
-    /**
-     * Muestra una barra de progreso visual
-     */
-    private void showProgressBar(String label, int currentValue, int maxValue, int length) {
-        int filled = (int) ((double) currentValue / maxValue * length);
-        
-        String startColor = "";
-        String endColor = "";
-        
-        if (label.equals("HP")) {
-            startColor = "\u001B[32m"; // Verde para HP
-        } else if (label.equals("Mana")) {
-            startColor = "\u001B[34m"; // Azul para Mana
-        }
-        endColor = "\u001B[0m";
-        
-        System.out.print(label + ": [");
-        System.out.print(startColor);
-        
+    private void showProgressBar(String label, int current, int max, int length) {
+        int filled = (int) ((double) current / max * length);
+        String color = label.equals("HP") ? "\u001B[32m" : "\u001B[34m";
+        System.out.print(color + "[");
         for (int i = 0; i < length; i++) {
-            if (i < filled) {
-                System.out.print("█");
-            } else {
-                System.out.print(" ");
-            }
+            System.out.print(i < filled ? "█" : " ");
         }
-        
-        System.out.print(endColor);
-        System.out.println("] " + currentValue + "/" + maxValue);
+        System.out.println("] " + current + "/" + max + "\u001B[0m");
     }
     
-    /**
-     * Muestra el menú de acciones disponibles
-     */
     private void showActionMenu() {
-        System.out.println("\nACCIONES DISPONIBLES:");
-        System.out.println("1. Ataque Normal");
-        System.out.println("2. Defender");
-        
-        if (currentTurn instanceof Magical) {
-            System.out.println("3. Lanzar Hechizo");
-        }
-        
-        if (currentTurn instanceof Healable) {
-            System.out.println("4. Curar");
-        }
-        
-        if (currentTurn instanceof Warrior) {
-            System.out.println("5. Ataque Cargado");
-        } else if (currentTurn instanceof Mage) {
-            System.out.println("5. Regenerar Maná");
-        }
-        
-        System.out.print("Elige una opción: ");
+        System.out.println("\n🎮 ACCIONES DISPONIBLES:");
+        System.out.println("1. ⚔️ Ataque Normal");
+        System.out.println("2. 🛡️ Defender");
+        if (currentTurn instanceof Magical) System.out.println("3. 🔮 Lanzar Hechizo");
+        if (currentTurn instanceof Healable) System.out.println("4. ❤️‍🩹 Curar");
+        if (currentTurn instanceof Warrior) System.out.println("5. 💥 Ataque Cargado");
+        else if (currentTurn instanceof Mage) System.out.println("5. 🔄 Regenerar Maná");
+        System.out.print("👉 Elige una opción: ");
     }
     
-    /**
-     * Realiza la acción seleccionada por el jugador
-     */
     private void performAction(int option, Characters target) {
-        int damage = 0;
-        
         switch (option) {
             case 1:
-                damage = currentTurn.attack();
+                int damage = currentTurn.attack();
                 applyDamage(damage, target);
                 break;
-                
             case 2:
                 if (currentTurn instanceof Defendable) {
                     int defense = ((Defendable) currentTurn).defend();
-                    System.out.println(currentTurn.getName() + " se defiende, aumentando su resistencia en " + defense + "!");
+                    System.out.println("🛡️ " + currentTurn.getName() + " se defiende (+" + defense + " DEF)");
                 } else {
-                    System.out.println(currentTurn.getName() + " intenta defenderse pero no sabe cómo!");
+                    System.out.println("❌ " + currentTurn.getName() + " no puede defenderse");
                 }
                 break;
-                
             case 3:
                 if (currentTurn instanceof Magical) {
                     damage = ((Magical) currentTurn).castSpell(target);
-                    if (damage > 0) {
-                        applyDamage(damage, target);
-                    }
+                    if (damage > 0) applyDamage(damage, target);
                 } else {
-                    System.out.println("¡Opción inválida!");
+                    System.out.println("❌ Opción inválida!");
                 }
                 break;
-                
             case 4:
                 if (currentTurn instanceof Healable) {
                     ((Healable) currentTurn).heal(currentTurn);
                 } else {
-                    System.out.println("¡Opción inválida!");
+                    System.out.println("❌ Opción inválida!");
                 }
                 break;
-                
             case 5:
                 if (currentTurn instanceof Warrior) {
                     damage = ((Warrior) currentTurn).chargeAttack();
-                    if (damage > 0) {
-                        applyDamage(damage, target);
-                    }
+                    if (damage > 0) applyDamage(damage, target);
                 } else if (currentTurn instanceof Mage) {
                     ((Mage) currentTurn).regenerateMana();
-                } else {
-                    System.out.println("¡Opción inválida!");
                 }
                 break;
-                
             default:
-                System.out.println("¡Opción inválida! Pierdes tu turno.");
-                break;
+                System.out.println("⚠️ ¡Opción inválida! Pierdes tu turno.");
         }
     }
     
-    /**
-     * Aplica daño a un objetivo considerando elementos y reacciones
-     */
     private void applyDamage(int baseDamage, Characters target) {
+        System.out.println("\n⚡ Elementos en juego:");
+        System.out.println("- Atacante (" + currentTurn.getName() + "): " + 
+                         (currentTurn.getElement() != null ? currentTurn.getElement() : "Ninguno"));
+        System.out.println("- Objetivo (" + target.getName() + "): " + 
+                         (target.getActiveElement() != null ? target.getActiveElement() : "Ninguno"));
+
+        // Manejo de reacciones elementales
+        if (currentTurn.getElement() != null && target.getActiveElement() != null && 
+            !currentTurn.getElement().equalsIgnoreCase(target.getActiveElement())) {
+            
+            Element attackerElement = Element.valueOf(currentTurn.getElement().toUpperCase());
+            Element defenderElement = Element.valueOf(target.getActiveElement().toUpperCase());
+            
+            String reactionName = Element.getReactionName(attackerElement, defenderElement);
+            System.out.println("\n⚡¡REACCIÓN ELEMENTAL! " + reactionName);
+            
+            // Daño adicional por reacción
+            int extraDamage = (int)(baseDamage * 0.5);
+            System.out.println("☠️ " + target.getName() + " sufre " + extraDamage + " daño adicional por la reacción!");
+            target.receiveDamage(extraDamage);
+            
+            // Limpiar elemento después de la reacción
+            target.clearActiveElement();
+        }
+
         int finalDamage = Reaction.calculateDamageWithReaction(currentTurn, target, baseDamage);
         target.receiveDamage(finalDamage);
-        System.out.println(currentTurn.getName() + " inflige " + finalDamage + " daño a " + target.getName());
+        
+        // Aplicar imbuimiento si no hay elemento activo
+        if (currentTurn.getElement() != null && target.getActiveElement() == null) {
+            target.applyElement(currentTurn.getElement());
+            System.out.println("✨ " + target.getName() + " ha sido imbuido con " + currentTurn.getElement());
+        }
     }
     
-    /**
-     * Cambia el turno al siguiente jugador
-     */
     public void switchTurn() {
         player1.updateElementStatus();
         player2.updateElementStatus();
-        
-        if (currentTurn == player1) {
-            currentTurn = player2;
-        } else {
-            currentTurn = player1;
-            turnNumber++;
-        }
+        currentTurn = (currentTurn == player1) ? player2 : player1;
+        if (currentTurn == player1) turnNumber++;
+        System.out.println("\n=================================");
     }
     
-    /**
-     * Actualiza los turnos de penalización para un jugador
-     */
     public void applyPenaltyToPlayer(Characters player, int turns) {
-        if (player == player1) {
-            player1PenaltyTurns = turns;
-        } else if (player == player2) {
-            player2PenaltyTurns = turns;
-        }
+        if (player == player1) player1PenaltyTurns = turns;
+        else if (player == player2) player2PenaltyTurns = turns;
+        System.out.println("⏳ " + player.getName() + " recibe penalización (" + turns + " turnos)");
     }
     
-    /**
-     * Muestra el resultado final de la batalla
-     */
     private void showBattleResult() {
-        System.out.println("\n=== FIN DE LA BATALLA ===");
-        
+        System.out.println("\n=== 🏁 FIN DE LA BATALLA ===");
+        System.out.println("🕒 Duración: " + (turnNumber - 1) + " turnos");
         if (!player1.isAlive() && !player2.isAlive()) {
-            System.out.println("¡EMPATE! Ambos jugadores han caído.");
+            System.out.println("\n🤝 ¡EMPATE! Ambos combatientes han caído");
         } else if (!player1.isAlive()) {
-            System.out.println(player2.getName() + " ¡GANA LA BATALLA!");
+            System.out.println("\n🎉 " + player2.getName() + " ¡GANA LA BATALLA!");
         } else {
-            System.out.println(player1.getName() + " ¡GANA LA BATALLA!");
+            System.out.println("\n🎉 " + player1.getName() + " ¡GANA LA BATALLA!");
         }
-        
-        System.out.println("\nESTADÍSTICAS FINALES:");
-        System.out.println(player1.getName() + ": " + player1.getCurrentHealth() + "/" + player1.getMaxHealth() + " HP");
-        System.out.println(player2.getName() + ": " + player2.getCurrentHealth() + "/" + player2.getMaxHealth() + " HP");
-        System.out.println("Duración: " + (turnNumber - 1) + " turnos");
+        System.out.println("\n📊 ESTADÍSTICAS FINALES:");
+        printCharacterStatus(player1);
+        printCharacterStatus(player2);
     }
     
     // Getters
-    public Characters getPlayer1() {
-        return player1;
-    }
-    
-    public Characters getPlayer2() {
-        return player2;
-    }
-    
-    public Characters getCurrentTurn() {
-        return currentTurn;
-    }
-    
-    public int getTurnNumber() {
-        return turnNumber;
-    }
+    public Characters getPlayer1() { return player1; }
+    public Characters getPlayer2() { return player2; }
+    public Characters getCurrentTurn() { return currentTurn; }
+    public int getTurnNumber() { return turnNumber; }
 }
