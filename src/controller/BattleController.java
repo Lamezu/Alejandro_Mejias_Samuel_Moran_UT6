@@ -1,6 +1,6 @@
 package controller;
 
-import model.characters.Character;
+import model.characters.Characters;
 import model.battle.*;
 import model.util.DamageCalculator;
 
@@ -8,11 +8,20 @@ public class BattleController {
     private Battle battle;
     private DamageCalculator damageCalculator;
     private boolean isAutoBattle;
+    private view.BattleInterface gameView;
 
-    public BattleController(Character player1, Character player2, boolean isAutoBattle) {
+    public BattleController(Characters player1, Characters player2, view.BattleInterface gameView) {
+        this.battle = new Battle(player1, player2);
+        this.damageCalculator = new DamageCalculator();
+        this.isAutoBattle = false;
+        this.gameView = gameView;
+    }
+
+    public BattleController(Characters player1, Characters player2, boolean isAutoBattle) {
         this.battle = new Battle(player1, player2);
         this.damageCalculator = new DamageCalculator();
         this.isAutoBattle = isAutoBattle;
+        this.gameView = null;
     }
 
     public void startBattle() {
@@ -27,8 +36,8 @@ public class BattleController {
         System.out.println("=== BATALLA AUTOMÁTICA INICIADA ===");
         
         while (!isBattleOver()) {
-            Character attacker = battle.getCurrentTurn();
-            Character defender = getOpponent(attacker);
+            Characters attacker = battle.getCurrentTurn();
+            Characters defender = getOpponent(attacker);
             
             // Lógica simple de IA para selección de acciones
             int action = selectAutoAction(attacker);
@@ -42,7 +51,7 @@ public class BattleController {
         showBattleResult();
     }
 
-    private int selectAutoAction(Character character) {
+    private int selectAutoAction(Characters character) {
         // Lógica simple para seleccionar acción automáticamente
         if (character.getCurrentHealth() < character.getMaxHealth() * 0.3 
             && character instanceof model.interfaces.Healable) {
@@ -58,7 +67,7 @@ public class BattleController {
         }
     }
 
-    private void performAutoAction(int action, Character attacker, Character defender) {
+    private void performAutoAction(int action, Characters attacker, Characters defender) {
         switch (action) {
             case 1:
                 int damage = attacker.attack();
@@ -98,8 +107,8 @@ public class BattleController {
     public void playerAction(int action) {
         if (isBattleOver()) return;
         
-        Character attacker = battle.getCurrentTurn();
-        Character defender = getOpponent(attacker);
+        Characters attacker = battle.getCurrentTurn();
+        Characters defender = getOpponent(attacker);
         
         switch (action) {
             case 1: // Ataque normal
@@ -145,20 +154,20 @@ public class BattleController {
         }
     }
 
-    private void applyDamage(int baseDamage, Character attacker, Character defender) {
+    private void applyDamage(int baseDamage, Characters attacker, Characters defender) {
         int finalDamage = Reaction.calculateDamageWithReaction(attacker, defender, baseDamage);
         defender.receiveDamage(finalDamage);
         System.out.println(attacker.getName() + " inflige " + finalDamage + " daño a " + defender.getName());
     }
 
-    public void usePotion(Character target, Potion potion) {
-        potion.use(target);
-        if (potion.hasPenalty()) {
-            battle.applyPenaltyToPlayer(target, potion.getPenaltyTurns());
+    public void usePotion(Characters user, Characters target, Potion potion) {
+        boolean success = potion.use(user, target);
+        if (success && potion.getPenaltyTurns() > 0) {
+            battle.applyPenaltyToPlayer(user, potion.getPenaltyTurns());
         }
     }
 
-    public Character getOpponent(Character character) {
+    public Characters getOpponent(Characters character) {
         return battle.getPlayer1() == character ? battle.getPlayer2() : battle.getPlayer1();
     }
 
@@ -166,7 +175,7 @@ public class BattleController {
         return !battle.getPlayer1().isAlive() || !battle.getPlayer2().isAlive();
     }
 
-    public Character getWinner() {
+    public Characters getWinner() {
         if (!battle.getPlayer1().isAlive() && !battle.getPlayer2().isAlive()) {
             return null; // Empate
         }
@@ -174,7 +183,7 @@ public class BattleController {
     }
 
     public void showBattleResult() {
-        Character winner = getWinner();
+        Characters winner = getWinner();
         if (winner == null) {
             System.out.println("¡La batalla terminó en empate!");
         } else {
@@ -183,15 +192,15 @@ public class BattleController {
     }
 
     // Métodos para la interfaz de usuario
-    public Character getCurrentTurnCharacter() {
+    public Characters getCurrentTurnCharacter() {
         return battle.getCurrentTurn();
     }
 
-    public Character getPlayer1() {
+    public Characters getPlayer1() {
         return battle.getPlayer1();
     }
 
-    public Character getPlayer2() {
+    public Characters getPlayer2() {
         return battle.getPlayer2();
     }
 
