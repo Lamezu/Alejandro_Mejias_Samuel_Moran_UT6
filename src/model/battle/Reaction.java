@@ -3,16 +3,9 @@ package model.battle;
 import model.characters.Characters;
 
 public class Reaction {
-    /**
-     * Calcula el daño considerando las reacciones elementales.
-     * @param attacker Personaje atacante
-     * @param defender Personaje defensor
-     * @param baseDamage Daño base del ataque
-     * @return Daño final después de aplicar reacciones
-     */
     public static int calculateDamageWithReaction(Characters attacker, Characters defender, int baseDamage) {
-        Element attackerElement = Element.valueOf(attacker.getActiveElement());
-        Element defenderElement = Element.valueOf(defender.getActiveElement());
+        Element attackerElement = getElementFromString(attacker.getElement());
+        Element defenderElement = getElementFromString(defender.getActiveElement());
         
         if (attackerElement == null || defenderElement == null) {
             return baseDamage;
@@ -28,13 +21,16 @@ public class Reaction {
         return (int)(baseDamage * multiplier);
     }
     
-    /**
-     * Verifica si hay una reacción elemental entre dos elementos
-     * @param attackerElement Elemento del atacante
-     * @param defenderElement Elemento del defensor
-     * @return true si hay reacción, false si no
-     */
     public static boolean hasReaction(Element attackerElement, Element defenderElement) {
         return Element.calculateReactionMultiplier(attackerElement, defenderElement) != 1.0;
+    }
+    
+    private static Element getElementFromString(String elementStr) {
+        if (elementStr == null) return null;
+        try {
+            return Element.valueOf(elementStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }
