@@ -1,7 +1,7 @@
 package view;
 
 import model.battle.Battle;
-import model.characters.Character;
+import model.characters.Characters;
 import model.battle.Element;
 
 import java.util.Scanner;
@@ -25,7 +25,7 @@ public class BattleInterface {
     /**
      * Inicializa la interfaz con los personajes de la batalla
      */
-    public void initialize(Character player1, Character player2) {
+    public void initialize(Characters player1, Characters player2) {
         player1Panel.setCharacter(player1);
         player2Panel.setCharacter(player2);
     }
@@ -57,8 +57,8 @@ public class BattleInterface {
         clearScreen();
         System.out.println("\n=== FIN DE LA BATALLA ===");
         
-        Character player1 = battle.getPlayer1();
-        Character player2 = battle.getPlayer2();
+        Characters player1 = battle.getPlayer1();
+        Characters player2 = battle.getPlayer2();
         
         if (!player1.isAlive() && !player2.isAlive()) {
             System.out.println("¡EMPATE! Ambos jugadores han caído.");
@@ -80,7 +80,7 @@ public class BattleInterface {
     /**
      * Muestra el menú de acciones y espera la selección del usuario
      */
-    public int showActionMenu(Character character) {
+    public int showActionMenu(Characters character) {
         return actionMenu.displayAndGetAction(character, scanner);
     }
     

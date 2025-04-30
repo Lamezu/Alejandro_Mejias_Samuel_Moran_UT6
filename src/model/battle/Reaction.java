@@ -1,6 +1,6 @@
 package model.battle;
 
-import model.characters.Character;
+import model.characters.Characters;
 
 public class Reaction {
     /**
@@ -10,7 +10,7 @@ public class Reaction {
      * @param baseDamage Daño base del ataque
      * @return Daño final después de aplicar reacciones
      */
-    public static int calculateDamageWithReaction(Character attacker, Character defender, int baseDamage) {
+    public static int calculateDamageWithReaction(Characters attacker, Characters defender, int baseDamage) {
         Element attackerElement = attacker.getElement();
         Element defenderElement = defender.getActiveElement();
         

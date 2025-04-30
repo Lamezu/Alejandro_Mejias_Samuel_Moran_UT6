@@ -1,10 +1,9 @@
 package model.util;
 
-import model.battle.Element;
-import model.characters.Character;
-import model.characters.PhysicalCharacter;
-import model.characters.MagicalCharacter;
 import java.util.Random;
+import model.battle.Element;
+import model.characters.MagicalCharacter;
+import model.characters.PhysicalCharacter;
 
 public class DamageCalculator {
     private static final Random random = new Random();

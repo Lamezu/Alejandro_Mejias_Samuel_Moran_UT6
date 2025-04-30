@@ -1,13 +1,13 @@
 package view;
 
-import model.characters.Character;
+import model.characters.Characters;
 import model.battle.Element;
 
 /**
  * Panel para mostrar la información de un personaje en la interfaz de batalla
  */
 public class CharacterPanel {
-    private Character character;
+    private Characters character;
     
     public CharacterPanel() {
         this.character = null;
@@ -16,7 +16,7 @@ public class CharacterPanel {
     /**
      * Establece el personaje a mostrar
      */
-    public void setCharacter(Character character) {
+    public void setCharacter(Characters character) {
         this.character = character;
     }
     

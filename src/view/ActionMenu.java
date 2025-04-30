@@ -1,6 +1,6 @@
 package view;
 
-import model.characters.Character;
+import model.characters.Characters;
 import model.characters.Warrior;
 import model.characters.Mage;
 import model.characters.Archer;
@@ -23,7 +23,7 @@ public class ActionMenu {
      * Muestra el menú de acciones disponibles según el tipo de personaje
      * @return La opción seleccionada por el usuario
      */
-    public int displayAndGetAction(Character character, Scanner scanner) {
+    public int displayAndGetAction(Characters character, Scanner scanner) {
         System.out.println("\nACCIONES DISPONIBLES:");
         System.out.println("1. Ataque Normal");
         
@@ -91,7 +91,7 @@ public class ActionMenu {
     /**
      * Muestra un menú para seleccionar un objetivo
      */
-    public int selectTarget(Character[] targets, Scanner scanner) {
+    public int selectTarget(Characters[] targets, Scanner scanner) {
         System.out.println("\nSelecciona un objetivo:");
         
         for (int i = 0; i < targets.length; i++) {

@@ -19,7 +19,7 @@ public class Sorcerer extends MagicalCharacter implements Magical, Defendable {
         return damage;
     }
     @Override
-    public int castSpell(Character target) {
+    public int castSpell(Characters target) {
         if (getCurrentMana() < 25) {
             System.out.println(getName() + " doesn't have enough mana to cast a fire spell!");
             return 0;

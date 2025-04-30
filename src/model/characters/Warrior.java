@@ -7,7 +7,7 @@ public class Warrior extends PhysicalCharacter implements Defendable {
     private boolean shield;
 
     public Warrior(String name, int level) {
-        super(name, level, 0, "tierra", 50, 30);
+        super(name, level);
         this.armor = 5 + level;
         this.shield = true;
         this.element = "tierra"; 

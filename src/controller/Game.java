@@ -1,6 +1,6 @@
 package controller;
 
-import model.*;
+import model.characters.*;
 import view.BattleInterface;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Scanner;
  * Controlador principal del juego
  */
 public class Game {
-    private ArrayList<Character> characters;
+    private ArrayList<Characters> characters;
     private BattleInterface gameView;
     private Scanner scanner;
     
@@ -23,7 +23,7 @@ public class Game {
     /**
      * Agrega un personaje a la lista del juego
      */
-    public void addCharacter(Character character) {
+    public void addCharacter(Characters character) {
         characters.add(character);
     }
     
@@ -88,7 +88,7 @@ public class Game {
         }
         
         for (int i = 0; i < characters.size(); i++) {
-            Character character = characters.get(i);
+            Characters character = characters.get(i);
             System.out.println((i + 1) + ". " + character.getName() + " - Nivel " + character.getLevel());
         }
         
@@ -137,8 +137,8 @@ public class Game {
             return;
         }
         
-        Character player1 = characters.get(option1 - 1);
-        Character player2 = characters.get(option2 - 1);
+        Characters player1 = characters.get(option1 - 1);
+        Characters player2 = characters.get(option2 - 1);
         
         BattleController battleController = new BattleController(player1, player2, gameView);
         battleController.startBattle();
@@ -203,7 +203,7 @@ public class Game {
             default: element = Element.NONE;
         }
         
-        Character newCharacter = null;
+        Characters newCharacter = null;
         
         switch (classOption) {
             case 1:
@@ -237,7 +237,7 @@ public class Game {
     public void showActions() {
         System.out.println("\n===== ACCIONES DE PERSONAJES =====");
         
-        for (Character character : characters) {
+        for (Characters character : characters) {
             System.out.println("\n" + character.getName() + ":");
             System.out.println("- Ataque: " + character.attack());
             

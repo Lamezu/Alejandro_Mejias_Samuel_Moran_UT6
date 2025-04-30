@@ -1,6 +1,6 @@
 package model.characters;
 
-public abstract class Character {
+public abstract class Characters {
     protected String name;
     protected int level;
     protected int maxHealth;
@@ -11,7 +11,7 @@ public abstract class Character {
     protected String activeElement; // Elemento con el que está imbuido actualmente
     protected int activeElementTurns; // Turnos restantes con el elemento activo
 
-    public Character(String name, int level) {
+    public Characters(String name, int level) {
         this.name = name;
         this.level = level;
         this.maxHealth = 100 + (level * 20);
@@ -153,7 +153,7 @@ public abstract class Character {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Character character = (Character) obj;
+        Characters character = (Characters) obj;
         return name.equals(character.name);
     }
     @Override

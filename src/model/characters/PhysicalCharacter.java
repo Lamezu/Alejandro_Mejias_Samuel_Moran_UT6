@@ -1,6 +1,6 @@
 package model.characters;
 
-public abstract class PhysicalCharacter extends Character {
+public abstract class PhysicalCharacter extends Characters {
     protected int strength;
     protected int resistance;
     public PhysicalCharacter(String name, int level) {
