@@ -76,7 +76,7 @@ public class Battle {
         showProgressBar("Mana", player1.getCurrentMana(), player1.getMaxMana(), 20);
         
         if (player1.getActiveElement() != null) {
-            System.out.println("Elemento activo: " + player1.getActiveElement().getName());
+            System.out.println("Elemento activo: " + player1.getActiveElement());
         }
         
         System.out.println();
@@ -87,7 +87,7 @@ public class Battle {
         showProgressBar("Mana", player2.getCurrentMana(), player2.getMaxMana(), 20);
         
         if (player2.getActiveElement() != null) {
-            System.out.println("Elemento activo: " + player2.getActiveElement().getName());
+            System.out.println("Elemento activo: " + player2.getActiveElement());
         }
         
         System.out.println();
@@ -213,21 +213,14 @@ public class Battle {
      */
     private void applyDamage(int baseDamage, Character target) {
         int finalDamage = Reaction.calculateDamageWithReaction(currentTurn, target, baseDamage);
-        
-        System.out.println(currentTurn.getName() + " causa " + baseDamage + " de daño a " + target.getName());
-        
-        if (finalDamage != baseDamage) {
-            System.out.println("Daño final: " + finalDamage);
-        }
-        
         target.receiveDamage(finalDamage);
-        target.applyElement(currentTurn.getElement());
+        System.out.println(currentTurn.getName() + " inflige " + finalDamage + " daño a " + target.getName());
     }
     
     /**
      * Cambia el turno al siguiente jugador
      */
-    private void switchTurn() {
+    public void switchTurn() {
         player1.updateElementStatus();
         player2.updateElementStatus();
         

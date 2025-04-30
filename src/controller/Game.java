@@ -1,6 +1,9 @@
 package controller;
 
 import model.*;
+import model.characters.Archer;
+import model.characters.Mage;
+import model.characters.Sorcerer;
 import view.BattleInterface;
 
 import java.util.ArrayList;
@@ -23,8 +26,8 @@ public class Game {
     /**
      * Agrega un personaje a la lista del juego
      */
-    public void addCharacter(Character character) {
-        characters.add(character);
+    public void addCharacter(Sorcerer sorcerer) {
+        characters.add(sorcerer);
     }
     
     /**

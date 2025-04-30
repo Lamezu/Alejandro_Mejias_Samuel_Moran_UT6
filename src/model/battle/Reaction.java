@@ -11,7 +11,7 @@ public class Reaction {
      * @return Daño final después de aplicar reacciones
      */
     public static int calculateDamageWithReaction(Character attacker, Character defender, int baseDamage) {
-        Element attackerElement = attacker.getElement();
+        Element attackerElement = attacker.getActiveElement();
         Element defenderElement = defender.getActiveElement();
         
         if (attackerElement == null || defenderElement == null) {
