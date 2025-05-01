@@ -27,7 +27,7 @@ Interfaz de Usuario:
 
 Muestra el nombre y rol del jugador.
 Presenta una barra de vida actualizada para el jugador y el enemigo.
-Las opciones de ataque y habilidades se presentan en un formato de tabla 2x2, permitiendo un máximo de un ataque, una defensa y dos habilidades.
+Las opciones de ataque y habilidades, permitiendo un máximo de un ataque, una defensa y una habilidad.
 Mecánicas de Juego
 Sistema por Turnos: Los jugadores toman turnos para atacar o defenderse.
 
