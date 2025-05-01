@@ -5,28 +5,27 @@ import model.characters.Characters;
 public class Reaction {
     public static int calculateDamageWithReaction(Characters attacker, Characters defender, int baseDamage) {
         Element attackerElement = getElementFromString(attacker.getElement());
-        Element defenderElement = getElementFromString(defender.getActiveElement());
+        Element defenderElement = getElementFromString(defender.getActiveElement()); // Usar elemento activo
 
+        // Si no hay elementos válidos, no hay reacción
         if (attackerElement == null || defenderElement == null) {
-            return baseDamage;
+            return baseDamage; // Sin reacción
         }
 
-        double multiplier = calculateMultiplier(attackerElement, defenderElement);
-        String reactionName = getReactionName(attackerElement, defenderElement);
+        // Calcula el multiplicador y el nombre de la reacción
+        double multiplier = Element.calculateReactionMultiplier(attackerElement, defenderElement);
+        String reactionName = Element.getReactionName(attackerElement, defenderElement);
 
-        if (multiplier != 1.0) {
-            System.out.println("\n¡REACCIÓN ELEMENTAL! **" + reactionName + "** - Multiplicador: x" + multiplier);
+        // Si el multiplicador es 1.0, no hay reacción
+        if (multiplier == 1.0) {
+            return baseDamage; // Sin reacción
         }
 
-        return (int)(baseDamage * multiplier);
-    }
+        // Mostrar mensaje de reacción
+        System.out.println("\n⚡¡REACCIÓN ELEMENTAL! " + reactionName + " - Multiplicador: x" + multiplier);
 
-    private static double calculateMultiplier(Element attacker, Element defender) {
-        return Element.calculateReactionMultiplier(attacker, defender);
-    }
-
-    private static String getReactionName(Element attacker, Element defender) {
-        return Element.getReactionName(attacker, defender);
+        // Devuelve el daño modificado
+        return (int) (baseDamage * multiplier);
     }
 
     private static Element getElementFromString(String elementStr) {
