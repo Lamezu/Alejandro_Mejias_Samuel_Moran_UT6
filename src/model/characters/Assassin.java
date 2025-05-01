@@ -18,9 +18,9 @@ public class Assassin extends PhysicalCharacter implements Movable, Healable {
         // Chance for critical hit
         if (Math.random() * 100 < criticalChance) {
             damage *= 2;
-            System.out.println(getName() + " lands a CRITICAL HIT! Dealing " + damage + " damage!");
+            System.out.println(getName() + " realiza un GOLPE CRÍTICO! Inflige " + damage + " de daño!");
         } else {
-            System.out.println(getName() + " attacks with daggers! Dealing " + damage + " damage!");
+            System.out.println(getName() + " ataca con dagas! Inflige " + damage + " de daño!");
         }
         return damage;
     }
@@ -29,13 +29,13 @@ public class Assassin extends PhysicalCharacter implements Movable, Healable {
     */
     public int backstabAttack() {
         if (getCurrentMana() < 15) {
-            System.out.println(getName() + " doesn't have enough energy to perform a backstab!");
+            System.out.println(getName() + " no tiene suficiente energía para realizar un ataque por la espalda!");
             return 0;
         }
         useMana(15);
         int baseDamage = calculatePhysicalDamage();
         int damage = baseDamage + (stealth / 2);
-        System.out.println(getName() + " performs a backstab attack! Dealing " + damage + " damage!");
+        System.out.println(getName() + " realiza un ataque por la espalda! Inflige " + damage + " de daño!");
         return damage;
     }
     /**
@@ -43,27 +43,27 @@ public class Assassin extends PhysicalCharacter implements Movable, Healable {
     */
     public void hide() {
         if (getCurrentMana() < 10) {
-            System.out.println(getName() + " doesn't have enough energy to hide!");
+            System.out.println(getName() + " no tiene suficiente energía para esconderse!");
             return;
         }
         useMana(10);
         criticalChance += 15;
-        System.out.println(getName() + " hides in the shadows! Critical chance increased to " + criticalChance + "%!");
+        System.out.println(getName() + " se oculta en las sombras! La probabilidad de crítico aumenta a " + criticalChance + "%!");
     }
     @Override
     public void move() {
-        System.out.println(getName() + " moves silently with " + stealth + " stealth!");
+        System.out.println(getName() + " se mueve silenciosamente con " + stealth + " de sigilo!");
     }
     @Override
     public void heal(Characters target) {
         if (getCurrentMana() < 20) {
-            System.out.println(getName() + " doesn't have enough energy to use medicine!");
+            System.out.println(getName() + " no tiene suficiente energía para usar medicina!");
             return;
         }
         useMana(20);
         int healAmount = getLevel() * 5;
         target.recoverHealth(healAmount);
-        System.out.println(getName() + " uses quick medicine on " + target.getName() + " for " + healAmount + " health!");
+        System.out.println(getName() + " usa medicina rápida en " + target.getName() + " por " + healAmount + " de salud!");
     }
     public int getStealth() {
         return stealth;

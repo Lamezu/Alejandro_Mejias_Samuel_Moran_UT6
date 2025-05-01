@@ -118,21 +118,19 @@ public class Game {
         System.out.println("4. Eléctrico");
         System.out.println("5. Viento");
         System.out.println("6. Planta");
-        System.out.println("7. Tierra");
         System.out.print("Opción: ");
         int elemOption = scanner.nextInt();
         scanner.nextLine();
         
         String elementStr;
         switch (elemOption) {
-            case 1: elementStr = "fire"; break;
-            case 2: elementStr = "water"; break;
-            case 3: elementStr = "ice"; break;
-            case 4: elementStr = "electric"; break;
-            case 5: elementStr = "wind"; break;
-            case 6: elementStr = "plant"; break;
-            case 7: elementStr = "earth"; break;
-            default: elementStr = "none";
+            case 1: elementStr = "fuego"; break;
+            case 2: elementStr = "agua"; break;
+            case 3: elementStr = "hielo"; break;
+            case 4: elementStr = "electrico"; break;
+            case 5: elementStr = "viento"; break;
+            case 6: elementStr = "planta"; break;
+            default: elementStr = "ninguno"; break;
         }
         
         Characters newCharacter = null;

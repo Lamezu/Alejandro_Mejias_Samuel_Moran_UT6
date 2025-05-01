@@ -15,18 +15,18 @@ public class Sorcerer extends MagicalCharacter implements Magical, Defendable {
     @Override
     public int attack() {
         int damage = calculateMagicalDamage() / 2;
-        System.out.println(getName() + " attacks with dark energy! Dealing " + damage + " damage!");
+        System.out.println(getName() + " ataca con energía oscura! Inflige " + damage + " de daño!");
         return damage;
     }
     @Override
     public int castSpell(Characters target) {
         if (getCurrentMana() < 25) {
-            System.out.println(getName() + " doesn't have enough mana to cast a fire spell!");
+            System.out.println(getName() + " no tiene suficiente maná para lanzar un hechizo de fuego!");
             return 0;
         }
         useMana(25);
         int damage = calculateMagicalDamage() + (concentration * 2);
-        System.out.println(getName() + " casts a powerful fire spell! Dealing " + damage + " damage!");
+        System.out.println(getName() + " lanza un poderoso hechizo de fuego! Inflige " + damage + " de daño!");
         return damage;
     }
     /**
@@ -34,23 +34,23 @@ public class Sorcerer extends MagicalCharacter implements Magical, Defendable {
     */
     public int summonEntity() {
         if (getCurrentMana() < 40) {
-            System.out.println(getName() + " doesn't have enough mana to summon an entity!");
+            System.out.println(getName() + " no tiene suficiente maná para invocar una entidad!");
             return 0;
         }
         useMana(40);
         int damage = summonPower + intelligence;
-        System.out.println(getName() + " summons a fire elemental! The entity attacks for " + damage + " damage!");
+        System.out.println(getName() + " invoca un elemental de fuego! La entidad ataca e inflige " + damage + " de daño!");
         return damage;
     }
     @Override
     public int defend() {
         if (getCurrentMana() < 15) {
-            System.out.println(getName() + " doesn't have enough mana to create a magical barrier!");
+            System.out.println(getName() + " no tiene suficiente maná para crear una barrera mágica!");
             return 0;
         }
         useMana(15);
         int defenseBonus = intelligence / 2;
-        System.out.println(getName() + " creates a magical barrier! DEF +" + defenseBonus);
+        System.out.println(getName() + " crea una barrera mágica! DEF +" + defenseBonus);
         return defenseBonus;
     }
     public int getConcentration() {

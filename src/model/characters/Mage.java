@@ -13,30 +13,30 @@ public class Mage extends MagicalCharacter implements Magical, Healable {
     @Override
     public int attack() {
         int damage = calculateMagicalDamage() / 2;
-        System.out.println(getName() + " attacks with a staff! Dealing " + damage + " damage!");
+        System.out.println(getName() + " ataca con un bastón! Inflige " + damage + " de daño!");
         return damage;
     }
     @Override
     public int castSpell(Characters target) {
         if (getCurrentMana() < 20) {
-            System.out.println(getName() + " doesn't have enough mana to cast a spell!");
+            System.out.println(getName() + " no tiene suficiente maná para lanzar un hechizo!");
             return 0;
         }
         useMana(20);
         int damage = calculateMagicalDamage();
-        System.out.println(getName() + " casts a powerful water spell! Dealing " + damage + " damage!");
+        System.out.println(getName() + " lanza un poderoso hechizo de agua! Inflige " + damage + " de daño!");
         return damage;
     }
     @Override
     public void heal(Characters target) {
         if (getCurrentMana() < 25) {
-            System.out.println(getName() + " doesn't have enough mana to cast healing magic!");
+            System.out.println(getName() + " no tiene suficiente maná para lanzar magia curativa!");
             return;
         }
         useMana(25);
         int healAmount = intelligence + wisdom/2;
         target.recoverHealth(healAmount);
-        System.out.println(getName() + " heals " + target.getName() + " for " + healAmount + " points!");
+        System.out.println(getName() + " cura a " + target.getName() + " por " + healAmount + " puntos!");
     }
     /**
     Método especial del mago: regenera maná
@@ -44,7 +44,7 @@ public class Mage extends MagicalCharacter implements Magical, Healable {
     public void regenerateMana() {
         int amount = manaRegen + wisdom/3;
         recoverMana(amount);
-        System.out.println(getName() + " focuses and regenerates " + amount + " mana points!");
+        System.out.println(getName() + " se concentra y regenera " + amount + " puntos de maná!");
     }
     public int getManaRegen() {
         return manaRegen;

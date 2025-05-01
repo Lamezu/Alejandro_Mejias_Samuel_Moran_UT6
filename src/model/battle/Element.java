@@ -7,7 +7,6 @@ public enum Element {
     ELECTRIC("electrico"),
     WIND("viento"),
     PLANT("planta"),
-    EARTH("tierra"),
     NONE("ninguno");
     
     private final String name;
@@ -43,7 +42,6 @@ public enum Element {
                 switch (defendingElement) {
                     case FIRE: return 2.0;
                     case ELECTRIC: return 1.5;
-                    case EARTH: return 1.5;
                     default: return 1.0;
                 }
             case ICE:
@@ -56,7 +54,6 @@ public enum Element {
             case ELECTRIC:
                 switch (defendingElement) {
                     case WATER: return 2.0;
-                    case EARTH: return 0.5;
                     default: return 1.0;
                 }
             case WIND:
@@ -72,13 +69,6 @@ public enum Element {
                     case ICE: return 0.5;
                     default: return 1.0;
                 }
-            case EARTH:
-                switch (defendingElement) {
-                    case WATER: return 0.5;
-                    case ELECTRIC: return 2.0;
-                    case PLANT: return 0.5;
-                    default: return 1.0;
-                }
             default:
                 return 1.0;
         }
@@ -91,19 +81,30 @@ public enum Element {
         }
 
         if (attackingElement == FIRE && defendingElement == WATER) {
-            return "¡Vaporización!";
+            return "¡Vaporizado!";
         } else if (attackingElement == WATER && defendingElement == FIRE) {
-            return "¡Extinción!";
+            return "¡Vaporizado!";
         } else if (attackingElement == FIRE && defendingElement == ICE) {
-            return "¡Derretimiento!";
+            return "¡Derretido!";
         } else if (attackingElement == WATER && defendingElement == ELECTRIC) {
-            return "¡Electrocución!";
+            return "¡Electrocargado!";
         } else if (attackingElement == WIND && defendingElement == FIRE) {
-            return "¡Propagación de llamas!";
-        } else if (attackingElement == EARTH && defendingElement == ELECTRIC) {
-            return "¡Absorción de energía!";
+            return "¡Torbellino!";
+        } else if (attackingElement == WIND && defendingElement == ICE) {
+            return "¡Torbellino!";
+        } else if (attackingElement == WIND && defendingElement == ELECTRIC) {
+            return "¡Torbellino!";
+        } else if (attackingElement == PLANT && defendingElement == FIRE) {
+            return "¡Quemado!";
+        } else if (attackingElement == ICE && defendingElement == FIRE) {
+            return "¡Derretido!";
+        } else if (attackingElement == ELECTRIC && defendingElement == WATER) {
+            return "¡Electrocargado!";
+        } else if (attackingElement == WIND && defendingElement == PLANT) {
+            return "Sin reacción";
         }
 
+        // Si no hay reacción especial, devolver un mensaje genérico
         return "Reacción elemental";
     }
 }

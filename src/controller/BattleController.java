@@ -3,6 +3,7 @@ package controller;
 import model.characters.Characters;
 import model.battle.*;
 import model.util.DamageCalculator;
+import java.util.Scanner;
 
 public class BattleController {
     private Battle battle;
@@ -28,7 +29,8 @@ public class BattleController {
         if (isAutoBattle) {
             autoBattle();
         } else {
-            battle.startBattle();
+            Scanner scanner = new Scanner(System.in); // Crear un objeto Scanner
+            battle.startBattle(scanner); // Pasar el Scanner como argumento
         }
     }
 

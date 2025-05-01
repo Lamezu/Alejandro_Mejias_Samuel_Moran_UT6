@@ -127,6 +127,14 @@ public abstract class Characters {
         return isAlive;
     }
 
+    public void setActiveElement(String element) {
+        this.activeElement = element;
+    }
+
+    public void setActiveElementTurns(int turns) {
+        this.activeElementTurns = turns;
+    }
+
     @Override
     public String toString() {
         return name + " (Nivel " + level + ") - HP: " + currentHealth + "/" + maxHealth + 

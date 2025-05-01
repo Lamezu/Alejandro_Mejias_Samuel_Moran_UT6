@@ -15,7 +15,7 @@ public class Warrior extends PhysicalCharacter implements Defendable {
     @Override
     public int attack() {
         int damage = calculatePhysicalDamage();
-        System.out.println(getName() + " attacks with brute force! Dealing " + damage + " damage!");
+        System.out.println(getName() + " ataca con fuerza bruta! Inflige " + damage + " de daño!");
         return damage;
     }
     /**
@@ -23,12 +23,12 @@ public class Warrior extends PhysicalCharacter implements Defendable {
     */
     public int chargeAttack() {
         if (getCurrentMana() < 15) {
-        System.out.println(getName() + " doesn't have enough mana to charge an attack!");
+        System.out.println(getName() + " no tiene suficiente maná para cargar un ataque!");
         return 0;
         }
         useMana(15);
         int damage = (int)(calculatePhysicalDamage() * 1.5);
-        System.out.println(getName() + " charges a powerful attack! Dealing " + damage + " damage!");
+        System.out.println(getName() + " carga un ataque poderoso! Inflige " + damage + " de daño!");
         return damage;
     }
     
@@ -38,7 +38,7 @@ public class Warrior extends PhysicalCharacter implements Defendable {
         if (shield) {
         defenseBonus += 10;
         }
-        System.out.println(getName() + " takes a defensive stance! DEF +" + defenseBonus);
+        System.out.println(getName() + " adopta una postura defensiva! DEF +" + defenseBonus);
         return defenseBonus;
     }
 
