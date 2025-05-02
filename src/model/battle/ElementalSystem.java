@@ -55,25 +55,14 @@ public class ElementalSystem {
         }
         
         // Obtenemos los elementos para la reacción
-        Element attackerElement = getElementFromString(attacker.getElement());
-        Element defenderActiveElement = getElementFromString(defender.getActiveElement());
+        String attackerElement = attacker.getElement();
+        String defenderActiveElement = defender.getActiveElement();
         
-        // Si alguno de los elementos no es válido, no hay reacción
-        if (attackerElement == Element.NONE || defenderActiveElement == Element.NONE) {
-            return baseDamage;
-        }
+        // Lógica de reacciones elementales
+        double multiplier = calculateReactionMultiplier(attackerElement, defenderActiveElement);
+        String reactionName = getReactionName(attackerElement, defenderActiveElement);
         
-        // Si los elementos son iguales, no hay reacción pero se resetea el contador de elementos
-        if (attackerElement == defenderActiveElement) {
-            System.out.println("Los elementos son iguales, se refresca la duración del efecto elemental.");
-            defender.setActiveElementTurns(3); // Resetear la duración del elemento
-            return baseDamage;
-        }
-        
-        // Calculamos el multiplicador de la reacción
-        double multiplier = Element.calculateReactionMultiplier(attackerElement, defenderActiveElement);
-        String reactionName = Element.getReactionName(attackerElement, defenderActiveElement);
-        
+
         // Si el multiplicador es diferente de 1.0, hay una reacción
         if (multiplier != 1.0) {
             System.out.println("\n⚡¡REACCIÓN ELEMENTAL! " + reactionName + " - Multiplicador: x" + multiplier);
@@ -98,17 +87,41 @@ public class ElementalSystem {
     }
     
     /**
-     * Convierte un string de elemento a su enum correspondiente
+     * Calcula el multiplicador de daño basado en los elementos del atacante y el defensor.
+     * @param attackingElement Elemento del atacante.
+     * @param defendingElement Elemento del defensor.
+     * @return Multiplicador de daño.
      */
-    private static Element getElementFromString(String elementStr) {
-        if (elementStr == null || elementStr.isEmpty()) {
-            return Element.NONE;
+    private static double calculateReactionMultiplier(String attackingElement, String defendingElement) {
+        if (attackingElement == null || defendingElement == null || 
+            attackingElement.equals("ninguno") || defendingElement.equals("ninguno")) {
+            return 1.0; // Sin reacción si no hay elementos válidos
         }
-        
-        try {
-            return Element.valueOf(elementStr.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return Element.NONE;
+
+        // Lógica de multiplicadores
+        if (attackingElement.equals("agua") && defendingElement.equals("fuego")) {
+            return 2.0; // Agua es fuerte contra fuego
+        } else if (attackingElement.equals("fuego") && defendingElement.equals("agua")) {
+            return 0.5; // Fuego es débil contra agua
         }
+
+        // Otros casos...
+        return 1.0;
+    }
+
+    /**
+     * Devuelve el nombre de la reacción elemental basada en el atacante y el defensor.
+     * @param attackingElement Elemento del atacante.
+     * @param defendingElement Elemento del defensor.
+     * @return Nombre de la reacción elemental.
+     */
+    private static String getReactionName(String attackingElement, String defendingElement) {
+        if (attackingElement.equals("agua") && defendingElement.equals("fuego")) {
+            return "¡Vaporizado!";
+        } else if (attackingElement.equals("fuego") && defendingElement.equals("agua")) {
+            return "¡Vaporizado inverso!";
+        }
+
+        return "Sin reacción";
     }
 }

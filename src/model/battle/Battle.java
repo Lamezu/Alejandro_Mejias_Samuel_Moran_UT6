@@ -123,14 +123,14 @@ public class Battle {
                     damage = ((Magical) currentTurn).castSpell(target);
                     if (damage > 0) applyDamage(damage, target);
                 } else {
-                    System.out.println("❌ Opción inválida!");
+                    System.out.println("❌ ¡Opción inválida!");
                 }
                 break;
             case 4:
                 if (currentTurn instanceof Healable) {
                     ((Healable) currentTurn).heal(currentTurn);
                 } else {
-                    System.out.println("❌ Opción inválida!");
+                    System.out.println("❌ ¡Opción inválida!");
                 }
                 break;
             case 5:
@@ -147,16 +147,13 @@ public class Battle {
     }
     
     private void applyDamage(int baseDamage, Characters target) {
-    // Asegurar que el atacante tenga su propio elemento activo
-    ElementalSystem.applyElementToAttacker(currentTurn);
-    
-    // Procesar la reacción elemental y calcular el daño resultante
-    int finalDamage = ElementalSystem.processReaction(currentTurn, target, baseDamage);
-    
-    // Aplicar el daño calculado
-    target.receiveDamage(finalDamage);
+        // Asegurar que el atacante tenga su propio elemento activo
+        ElementalSystem.applyElementToAttacker(currentTurn);
         
-        // Aplicamos el daño final
+        // Procesar la reacción elemental y calcular el daño resultante
+        int finalDamage = ElementalSystem.processReaction(currentTurn, target, baseDamage);
+        
+        // Aplicar el daño calculado
         target.receiveDamage(finalDamage);
         System.out.println("☠️ " + target.getName() + " sufre " + finalDamage + " puntos de daño" + 
                          (finalDamage != baseDamage ? " (Base: " + baseDamage + ")" : ""));
@@ -178,7 +175,7 @@ public class Battle {
     
     private void showBattleResult() {
         System.out.println("\n=== 🏁 FIN DE LA BATALLA ===");
-        System.out.println("🕒 Duración: " + (turnNumber - 1) + " turnos");
+        System.out.println("⏲️ Duración: " + (turnNumber - 1) + " turnos");
         if (!player1.isAlive() && !player2.isAlive()) {
             System.out.println("\n🤝 ¡EMPATE! Ambos combatientes han caído");
         } else if (!player1.isAlive()) {
