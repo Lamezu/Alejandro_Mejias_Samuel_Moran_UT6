@@ -103,6 +103,34 @@ public class ElementalSystem {
             return 2.0; // Agua es fuerte contra fuego
         } else if (attackingElement.equals("fuego") && defendingElement.equals("agua")) {
             return 0.5; // Fuego es débil contra agua
+        }  else if (attackingElement.equals("fuego") && defendingElement.equals("hielo")) {
+            return 2.0; // Fuego es fuerte contra hielo
+        } else if (attackingElement.equals("fuego") && defendingElement.equals("planta")) {
+            return 2.0; // Fuego es fuerte contra planta
+        } else if (attackingElement.equals("fuego") && defendingElement.equals("viento")) {
+            return 1.5; // Fuego es moderadamente fuerte contra viento
+        } else if (attackingElement.equals("agua") && defendingElement.equals("fuego")) {
+            return 2.0; // Agua es fuerte contra fuego
+        } else if (attackingElement.equals("agua") && defendingElement.equals("electrico")) {
+            return 1.5; // Agua es moderadamente fuerte contra eléctrico
+        } else if (attackingElement.equals("hielo") && defendingElement.equals("fuego")) {
+            return 0.5; // Hielo es débil contra fuego
+        } else if (attackingElement.equals("hielo") && defendingElement.equals("agua")) {
+            return 1.5; // Hielo es moderadamente fuerte contra agua
+        } else if (attackingElement.equals("hielo") && defendingElement.equals("viento")) {
+            return 1.5; // Hielo es moderadamente fuerte contra viento
+        } else if (attackingElement.equals("electrico") && defendingElement.equals("agua")) {
+            return 2.0; // Eléctrico es fuerte contra agua
+        } else if (attackingElement.equals("viento") && defendingElement.equals("fuego")) {
+            return 1.5; // Viento es moderadamente fuerte contra fuego
+        } else if (attackingElement.equals("viento") && defendingElement.equals("electrico")) {
+            return 1.5; // Viento es moderadamente fuerte contra eléctrico
+        } else if (attackingElement.equals("planta") && defendingElement.equals("fuego")) {
+            return 0.5; // Planta es débil contra fuego
+        } else if (attackingElement.equals("planta") && defendingElement.equals("agua")) {
+            return 1.5; // Planta es moderadamente fuerte contra agua
+        } else if (attackingElement.equals("planta") && defendingElement.equals("hielo")) {
+            return 0.5; // Planta es débil contra hielo
         }
 
         // Otros casos...
@@ -120,6 +148,32 @@ public class ElementalSystem {
             return "¡Vaporizado!";
         } else if (attackingElement.equals("fuego") && defendingElement.equals("agua")) {
             return "¡Vaporizado inverso!";
+        } else if (attackingElement.equals("fuego") && defendingElement.equals("hielo")) {
+            return "¡Derretido!"; // Fuego es fuerte contra hielo
+        } else if (attackingElement.equals("fuego") && defendingElement.equals("planta")) {
+            return "¡Quemado!"; // Fuego es fuerte contra planta
+        } else if (attackingElement.equals("fuego") && defendingElement.equals("viento")) {
+            return "¡Torbellino de fuego!"; // Fuego es moderadamente fuerte contra viento
+        } else if (attackingElement.equals("agua") && defendingElement.equals("electrico")) {
+            return "¡Electrocargado!"; // Agua es moderadamente fuerte contra eléctrico
+        } else if (attackingElement.equals("hielo") && defendingElement.equals("fuego")) {
+            return "¡Derretido inverso!"; // Hielo es débil contra fuego
+        } else if (attackingElement.equals("hielo") && defendingElement.equals("agua")) {
+            return "¡Congelado líquido!"; // Hielo es moderadamente fuerte contra agua
+        } else if (attackingElement.equals("hielo") && defendingElement.equals("viento")) {
+            return "¡Torbellino helado!"; // Hielo es moderadamente fuerte contra viento
+        } else if (attackingElement.equals("electrico") && defendingElement.equals("agua")) {
+            return "¡Electrocargado!"; // Eléctrico es fuerte contra agua
+        } else if (attackingElement.equals("viento") && defendingElement.equals("fuego")) {
+            return "¡Torbellino de fuego!"; // Viento es moderadamente fuerte contra fuego
+        } else if (attackingElement.equals("viento") && defendingElement.equals("electrico")) {
+            return "¡Torbellino eléctrico!"; // Viento es moderadamente fuerte contra eléctrico
+        } else if (attackingElement.equals("planta") && defendingElement.equals("fuego")) {
+            return "¡Quemado inverso!"; // Planta es débil contra fuego
+        } else if (attackingElement.equals("planta") && defendingElement.equals("agua")) {
+            return "¡Nutrición vegetal!"; // Planta es moderadamente fuerte contra agua
+        } else if (attackingElement.equals("planta") && defendingElement.equals("hielo")) {
+            return "¡Congelación vegetal inversa!"; // Planta es débil contra hielo
         }
 
         return "Sin reacción";
