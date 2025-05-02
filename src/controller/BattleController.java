@@ -29,8 +29,8 @@ public class BattleController {
         if (isAutoBattle) {
             autoBattle();
         } else {
-            Scanner scanner = new Scanner(System.in); // Crear un objeto Scanner
-            battle.startBattle(scanner); // Pasar el Scanner como argumento
+            Scanner scanner = new Scanner(System.in);
+            battle.startBattle(scanner);
         }
     }
 
@@ -157,9 +157,31 @@ public class BattleController {
     }
 
     private void applyDamage(int baseDamage, Characters attacker, Characters defender) {
-        int finalDamage = Reaction.calculateDamageWithReaction(attacker, defender, baseDamage);
+        System.out.println("\n⚡ Elementos en juego:");
+        System.out.println("- Atacante (" + attacker.getName() + "): " + 
+                        (attacker.getElement() != null ? attacker.getElement() : "Ninguno"));
+        System.out.println("- Objetivo (" + defender.getName() + "): " + 
+                        (defender.getActiveElement() != null ? defender.getActiveElement() : "Ninguno"));
+        ElementalSystem.applyElementToAttacker(attacker);
+    
+        // Procesar la reacción elemental usando nuestro nuevo sistema
+        int finalDamage = ElementalSystem.processReaction(attacker, defender, baseDamage);
+                        
+        // Aplicar el daño calculado
         defender.receiveDamage(finalDamage);
-        System.out.println(attacker.getName() + " inflige " + finalDamage + " daño a " + defender.getName());
+        
+        // Si no hubo reacción y el atacante tiene un elemento, aplicamos el elemento al defensor
+        if (finalDamage == baseDamage && attacker.getElement() != null && 
+            !attacker.getElement().equalsIgnoreCase("ninguno") && 
+            defender.getActiveElement() == null) {
+            
+            defender.applyElement(attacker.getElement());
+        }
+        
+        // Aplicamos el daño final
+        defender.receiveDamage(finalDamage);
+        System.out.println("☠️ " + defender.getName() + " sufre " + finalDamage + " puntos de daño" + 
+                         (finalDamage != baseDamage ? " (Base: " + baseDamage + ")" : ""));
     }
 
     public void usePotion(Characters user, Characters target, Potion potion) {

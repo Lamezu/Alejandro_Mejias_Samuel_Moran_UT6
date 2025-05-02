@@ -3,37 +3,42 @@ package model.battle;
 import model.characters.Characters;
 
 public class Reaction {
+    /**
+     * Calcula el daño después de aplicar reacciones elementales
+     * @param attacker El personaje atacante
+     * @param defender El personaje defensor
+     * @param baseDamage El daño base antes de aplicar la reacción
+     * @return El daño final después de aplicar la reacción elemental
+     */
     public static int calculateDamageWithReaction(Characters attacker, Characters defender, int baseDamage) {
-        Element attackerElement = getElementFromString(attacker.getElement());
-        Element defenderElement = getElementFromString(defender.getActiveElement()); // Usar elemento activo
-
-        // Si no hay elementos válidos, no hay reacción
-        if (attackerElement == null || defenderElement == null) {
-            return baseDamage; // Sin reacción
-        }
-
-        // Calcula el multiplicador y el nombre de la reacción
-        double multiplier = Element.calculateReactionMultiplier(attackerElement, defenderElement);
-        String reactionName = Element.getReactionName(attackerElement, defenderElement);
-
-        // Si el multiplicador es 1.0, no hay reacción
-        if (multiplier == 1.0) {
-            return baseDamage; // Sin reacción
-        }
-
-        // Mostrar mensaje de reacción
-        System.out.println("\n⚡¡REACCIÓN ELEMENTAL! " + reactionName + " - Multiplicador: x" + multiplier);
-
-        // Devuelve el daño modificado
-        return (int) (baseDamage * multiplier);
+        // Primero, nos aseguramos de que el atacante tenga su propio elemento activo
+        ElementalSystem.applyElementToAttacker(attacker);
+        
+        // Luego procesamos la reacción entre el elemento del atacante y el elemento activo del defensor
+        return ElementalSystem.processReaction(attacker, defender, baseDamage);
     }
 
-    private static Element getElementFromString(String elementStr) {
-        if (elementStr == null || elementStr.isEmpty()) return null;
+    /**
+     * Procesa una reacción elemental completa, devuelve el daño y gestiona efectos secundarios
+     * @param attacker El personaje atacante
+     * @param defender El personaje defensor
+     * @param baseDamage El daño base antes de aplicar la reacción
+     * @return El daño final después de aplicar la reacción elemental
+     */
+    public static int processElementalReaction(Characters attacker, Characters defender, int baseDamage) {
+        // Este método ahora simplemente delega al ElementalSystem
+        return calculateDamageWithReaction(attacker, defender, baseDamage);
+    }
+    
+    /**
+     * Convierte un string de elemento a su enum correspondiente
+     */
+    public static Element getElementFromString(String elementStr) {
+        if (elementStr == null || elementStr.isEmpty()) return Element.NONE;
         try {
             return Element.valueOf(elementStr.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return null;
+            return Element.NONE;
         }
     }
 }

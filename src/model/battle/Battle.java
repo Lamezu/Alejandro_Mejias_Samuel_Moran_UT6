@@ -147,39 +147,19 @@ public class Battle {
     }
     
     private void applyDamage(int baseDamage, Characters target) {
-        System.out.println("\n⚡ Elementos en juego:");
-        System.out.println("- Atacante (" + currentTurn.getName() + "): " + 
-                         (currentTurn.getElement() != null ? currentTurn.getElement() : "Ninguno"));
-        System.out.println("- Objetivo (" + target.getName() + "): " + 
-                         (target.getActiveElement() != null ? target.getActiveElement() : "Ninguno"));
-
-        // Manejo de reacciones elementales
-        if (currentTurn.getElement() != null && target.getActiveElement() != null && 
-            !currentTurn.getElement().equalsIgnoreCase(target.getActiveElement())) {
-            
-            Element attackerElement = Element.valueOf(currentTurn.getElement().toUpperCase());
-            Element defenderElement = Element.valueOf(target.getActiveElement().toUpperCase());
-            
-            String reactionName = Element.getReactionName(attackerElement, defenderElement);
-            System.out.println("\n⚡¡REACCIÓN ELEMENTAL! " + reactionName);
-            
-            // Daño adicional por reacción
-            int extraDamage = (int)(baseDamage * 0.5);
-            System.out.println("☠️ " + target.getName() + " sufre " + extraDamage + " daño adicional por la reacción!");
-            target.receiveDamage(extraDamage);
-            
-            // Limpiar elemento después de la reacción
-            target.clearActiveElement();
-        }
-
-        int finalDamage = Reaction.calculateDamageWithReaction(currentTurn, target, baseDamage);
-        target.receiveDamage(finalDamage);
+    // Asegurar que el atacante tenga su propio elemento activo
+    ElementalSystem.applyElementToAttacker(currentTurn);
+    
+    // Procesar la reacción elemental y calcular el daño resultante
+    int finalDamage = ElementalSystem.processReaction(currentTurn, target, baseDamage);
+    
+    // Aplicar el daño calculado
+    target.receiveDamage(finalDamage);
         
-        // Aplicar imbuimiento si no hay elemento activo
-        if (currentTurn.getElement() != null && target.getActiveElement() == null) {
-            target.applyElement(currentTurn.getElement());
-            System.out.println("✨ " + target.getName() + " ha sido imbuido con " + currentTurn.getElement());
-        }
+        // Aplicamos el daño final
+        target.receiveDamage(finalDamage);
+        System.out.println("☠️ " + target.getName() + " sufre " + finalDamage + " puntos de daño" + 
+                         (finalDamage != baseDamage ? " (Base: " + baseDamage + ")" : ""));
     }
     
     public void switchTurn() {

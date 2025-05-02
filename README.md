@@ -69,6 +69,7 @@ Las habilidades pueden tener múltiples funciones, como sigilo para los asesinos
 │   │   ├── battle/        # Clases relacionadas con el combate
 │   │   │   ├── Battle.java
 │   │   │   ├── Element.java (enum)
+            ├── ElementalSystem.java
 │   │   │   ├── Reaction.java
 │   │   │   └── Potion.java
 │   │   └── util/          # Utilidades del proyecto
